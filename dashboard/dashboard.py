@@ -7,7 +7,7 @@ st.set_page_config(page_title="E-Commerce Dashboard", layout="wide")
 # Load data
 @st.cache_data
 def load_data():
-    df = pd.read_csv("main_data.csv")
+    df = pd.read_csv("dashboard/main_data.csv")
     df['order_purchase_timestamp'] = pd.to_datetime(df['order_purchase_timestamp'])
     return df
 
@@ -175,5 +175,6 @@ segment_counts = rfm['Segment'].value_counts()
 fig5, ax5 = plt.subplots(figsize=(8,5))
 segment_counts.plot(kind='bar', ax=ax5)
 ax5.set_ylabel("Number of Customers")
+
 
 st.pyplot(fig5)
