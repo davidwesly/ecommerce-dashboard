@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
+import os
 
 st.set_page_config(page_title="E-Commerce Dashboard", layout="wide")
 
@@ -180,5 +181,6 @@ ax5.set_ylabel("Number of Customers")
 
 
 st.pyplot(fig5)
+
 
 
