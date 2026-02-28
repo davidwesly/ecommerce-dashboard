@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import matplotlib.pyplot as plt
 
 # ==================================================
 # PAGE CONFIG
@@ -121,3 +122,4 @@ st.line_chart(installment_analysis)
 # ==================================================
 st.markdown("---")
 st.markdown("Dashboard created using Streamlit 🚀")
+
