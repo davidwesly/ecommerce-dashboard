@@ -2,16 +2,19 @@ import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 
-# ===============================
-# Page Configuration
-# ===============================
-st.set_page_config(page_title="E-Commerce Dashboard", layout="wide")
+# ==================================================
+# PAGE CONFIG
+# ==================================================
+st.set_page_config(
+    page_title="E-Commerce Business Dashboard",
+    layout="wide"
+)
 
 st.title("📊 E-Commerce Business Dashboard")
 
-# ===============================
-# Load Data
-# ===============================
+# ==================================================
+# LOAD DATA
+# ==================================================
 @st.cache_data
 def load_data():
     df = pd.read_csv("main_data.csv")
@@ -19,10 +22,10 @@ def load_data():
 
 df = load_data()
 
-# ===============================
-# Sidebar Filter
-# ===============================
-st.sidebar.header("Filter")
+# ==================================================
+# SIDEBAR FILTER
+# ==================================================
+st.sidebar.header("Filter Data")
 
 selected_year = st.sidebar.selectbox(
     "Select Year",
@@ -31,10 +34,10 @@ selected_year = st.sidebar.selectbox(
 
 filtered_df = df[df['year'] == selected_year]
 
-# ===============================
-# KPI Section
-# ===============================
-st.subheader("Business Overview Metrics")
+# ==================================================
+# KPI SECTION
+# ==================================================
+st.subheader("📌 Business Overview Metrics")
 
 total_revenue = filtered_df['revenue'].sum()
 total_orders = filtered_df['order_id'].nunique()
@@ -44,27 +47,32 @@ aov = filtered_df.groupby('order_id')['revenue'].sum().mean()
 col1, col2, col3, col4 = st.columns(4)
 
 col1.metric("Total Revenue", f"${total_revenue:,.0f}")
-col2.metric("Total Orders", total_orders)
-col3.metric("Total Customers", total_customers)
-col4.metric("AOV", f"${aov:,.2f}")
+col2.metric("Total Orders", f"{total_orders:,}")
+col3.metric("Total Customers", f"{total_customers:,}")
+col4.metric("Average Order Value", f"${aov:,.2f}")
 
-# ===============================
-# Monthly Revenue Trend
-# ===============================
-st.subheader("Monthly Revenue Trend")
+# ==================================================
+# MONTHLY REVENUE TREND
+# ==================================================
+st.subheader("📈 Monthly Revenue Trend")
 
-monthly_revenue = filtered_df.groupby('month_year')['revenue'].sum()
+monthly_revenue = (
+    filtered_df.groupby('month_year')['revenue']
+    .sum()
+    .sort_index()
+)
 
-fig, ax = plt.subplots()
-monthly_revenue.plot(ax=ax)
-plt.xticks(rotation=45)
-plt.ylabel("Revenue")
-st.pyplot(fig)
+fig1, ax1 = plt.subplots()
+monthly_revenue.plot(ax=ax1)
+ax1.set_ylabel("Revenue")
+ax1.tick_params(axis='x', rotation=45)
 
-# ===============================
-# Revenue by State
-# ===============================
-st.subheader("Top 10 States by Revenue")
+st.pyplot(fig1)
+
+# ==================================================
+# TOP 10 STATES
+# ==================================================
+st.subheader("🏙️ Top 10 States by Revenue")
 
 state_revenue = (
     filtered_df.groupby('customer_state')['revenue']
@@ -73,15 +81,16 @@ state_revenue = (
     .head(10)
 )
 
-fig, ax = plt.subplots()
-state_revenue.plot(kind='bar', ax=ax)
-plt.ylabel("Revenue")
-st.pyplot(fig)
+fig2, ax2 = plt.subplots()
+state_revenue.plot(kind='bar', ax=ax2)
+ax2.set_ylabel("Revenue")
 
-# ===============================
-# Revenue by Category
-# ===============================
-st.subheader("Top 10 Categories by Revenue")
+st.pyplot(fig2)
+
+# ==================================================
+# TOP 10 PRODUCT CATEGORIES
+# ==================================================
+st.subheader("🛍️ Top 10 Categories by Revenue")
 
 category_revenue = (
     filtered_df.groupby('product_category_name_english')['revenue']
@@ -90,45 +99,49 @@ category_revenue = (
     .head(10)
 )
 
-fig, ax = plt.subplots()
-category_revenue.plot(kind='bar', ax=ax)
-plt.xticks(rotation=45)
-plt.ylabel("Revenue")
-st.pyplot(fig)
+fig3, ax3 = plt.subplots()
+category_revenue.plot(kind='bar', ax=ax3)
+ax3.set_ylabel("Revenue")
+ax3.tick_params(axis='x', rotation=45)
 
-# ===============================
-# Payment Behavior
-# ===============================
-st.subheader("Average Transaction Value by Payment Type")
+st.pyplot(fig3)
+
+# ==================================================
+# PAYMENT METHOD ANALYSIS
+# ==================================================
+st.subheader("💳 Average Revenue by Payment Type")
 
 payment_avg = (
-    filtered_df.groupby('payment_type')['payment_value']
+    filtered_df.groupby('payment_type')['revenue']
     .mean()
     .sort_values(ascending=False)
 )
 
-fig, ax = plt.subplots()
-payment_avg.plot(kind='bar', ax=ax)
-plt.ylabel("Average Payment Value")
-st.pyplot(fig)
+fig4, ax4 = plt.subplots()
+payment_avg.plot(kind='bar', ax=ax4)
+ax4.set_ylabel("Average Revenue")
 
-# ===============================
-# Installment vs Transaction
-# ===============================
-st.subheader("Installment vs Average Payment Value")
+st.pyplot(fig4)
+
+# ==================================================
+# INSTALLMENT ANALYSIS
+# ==================================================
+st.subheader("📊 Installment vs Average Revenue")
 
 installment_analysis = (
-    filtered_df.groupby('payment_installments')['payment_value']
+    filtered_df.groupby('payment_installments')['revenue']
     .mean()
+    .sort_index()
 )
 
-fig, ax = plt.subplots()
-installment_analysis.plot(ax=ax)
-plt.ylabel("Average Payment Value")
-st.pyplot(fig)
+fig5, ax5 = plt.subplots()
+installment_analysis.plot(ax=ax5)
+ax5.set_ylabel("Average Revenue")
 
-# ===============================
-# Footer
-# ===============================
+st.pyplot(fig5)
+
+# ==================================================
+# FOOTER
+# ==================================================
 st.markdown("---")
-st.markdown("Dashboard created using Streamlit")
+st.markdown("Dashboard created using Streamlit 🚀")
