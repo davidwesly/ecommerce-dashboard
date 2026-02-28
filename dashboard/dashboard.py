@@ -1,6 +1,5 @@
 import streamlit as st
 import pandas as pd
-import matplotlib.pyplot as plt
 
 # ==================================================
 # PAGE CONFIG
@@ -17,8 +16,7 @@ st.title("📊 E-Commerce Business Dashboard")
 # ==================================================
 @st.cache_data
 def load_data():
-    df = pd.read_csv("main_data.csv")
-    return df
+    return pd.read_csv("main_data.csv")
 
 df = load_data()
 
@@ -62,12 +60,7 @@ monthly_revenue = (
     .sort_index()
 )
 
-fig1, ax1 = plt.subplots()
-monthly_revenue.plot(ax=ax1)
-ax1.set_ylabel("Revenue")
-ax1.tick_params(axis='x', rotation=45)
-
-st.pyplot(fig1)
+st.line_chart(monthly_revenue)
 
 # ==================================================
 # TOP 10 STATES
@@ -81,14 +74,10 @@ state_revenue = (
     .head(10)
 )
 
-fig2, ax2 = plt.subplots()
-state_revenue.plot(kind='bar', ax=ax2)
-ax2.set_ylabel("Revenue")
-
-st.pyplot(fig2)
+st.bar_chart(state_revenue)
 
 # ==================================================
-# TOP 10 PRODUCT CATEGORIES
+# TOP 10 CATEGORIES
 # ==================================================
 st.subheader("🛍️ Top 10 Categories by Revenue")
 
@@ -99,15 +88,10 @@ category_revenue = (
     .head(10)
 )
 
-fig3, ax3 = plt.subplots()
-category_revenue.plot(kind='bar', ax=ax3)
-ax3.set_ylabel("Revenue")
-ax3.tick_params(axis='x', rotation=45)
-
-st.pyplot(fig3)
+st.bar_chart(category_revenue)
 
 # ==================================================
-# PAYMENT METHOD ANALYSIS
+# PAYMENT ANALYSIS
 # ==================================================
 st.subheader("💳 Average Revenue by Payment Type")
 
@@ -117,11 +101,7 @@ payment_avg = (
     .sort_values(ascending=False)
 )
 
-fig4, ax4 = plt.subplots()
-payment_avg.plot(kind='bar', ax=ax4)
-ax4.set_ylabel("Average Revenue")
-
-st.pyplot(fig4)
+st.bar_chart(payment_avg)
 
 # ==================================================
 # INSTALLMENT ANALYSIS
@@ -134,11 +114,7 @@ installment_analysis = (
     .sort_index()
 )
 
-fig5, ax5 = plt.subplots()
-installment_analysis.plot(ax=ax5)
-ax5.set_ylabel("Average Revenue")
-
-st.pyplot(fig5)
+st.line_chart(installment_analysis)
 
 # ==================================================
 # FOOTER
